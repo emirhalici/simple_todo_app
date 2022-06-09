@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_constants.dart';
 import 'package:simple_todo_app/widgets/todo_card.dart';
@@ -12,12 +13,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ProjectConstants.lightTheme,
-      darkTheme: ProjectConstants.darkTheme,
-      themeMode: ThemeMode.system,
-      home: const HomePage(),
+    return ScreenUtilInit(
+      designSize: const Size(428, 926),
+      builder: (context, child) => MaterialApp(
+        title: 'Simple Todo',
+        theme: ProjectConstants.lightTheme,
+        darkTheme: ProjectConstants.darkTheme,
+        themeMode: ThemeMode.system,
+        home: const HomePage(),
+      ),
     );
   }
 }

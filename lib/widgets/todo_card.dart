@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_constants.dart';
@@ -65,8 +66,8 @@ class _TodoCardState extends State<TodoCard> {
                             child: Text(
                               widget.todoModel.todo,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 22,
+                              style: TextStyle(
+                                fontSize: 22.sp,
                               ),
                             ),
                           ),
@@ -74,7 +75,7 @@ class _TodoCardState extends State<TodoCard> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.all(Radius.circular(12.0)),
