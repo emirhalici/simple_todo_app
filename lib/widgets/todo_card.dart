@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_constants.dart';
 
@@ -26,7 +27,7 @@ class _TodoCardState extends State<TodoCard> {
     Color stripColor = ProjectConstants.priorityColor(widget.todoModel.priority);
 
     return SizedBox(
-      height: 100,
+      height: 110,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         child: Card(
@@ -73,8 +74,19 @@ class _TodoCardState extends State<TodoCard> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 12, bottom: 6),
-                      child: Text(widget.todoModel.createdAt.toString()),
+                      padding: const EdgeInsets.all(4.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: Text(
+                            DateFormat('dd MMM yyyy').format(widget.todoModel.createdAt),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
