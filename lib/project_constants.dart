@@ -29,8 +29,10 @@ class ProjectConstants {
   static final ThemeData lightTheme = ThemeData(
     fontFamily: 'Poppins',
     useMaterial3: false,
-    colorScheme: const ColorScheme.light(
+    colorScheme: ColorScheme.light(
       primary: Colors.blueGrey,
+      secondary: Colors.blueGrey.shade400,
+      onSecondary: Colors.white,
       brightness: Brightness.light,
     ),
   );
@@ -39,8 +41,10 @@ class ProjectConstants {
     fontFamily: 'Poppins',
     useMaterial3: false,
     scaffoldBackgroundColor: const Color(0xAA2F3136),
-    colorScheme: const ColorScheme.dark(
+    colorScheme: ColorScheme.dark(
       primary: Colors.blueGrey,
+      secondary: Colors.blueGrey.shade700,
+      onSecondary: Colors.white,
       brightness: Brightness.dark,
     ),
   );

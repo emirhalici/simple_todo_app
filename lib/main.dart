@@ -31,6 +31,14 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Simple Todo'),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(
+          Icons.add,
+        ),
+        onPressed: () {
+          // TODO : ADD NEW TODO
+        },
+      ),
       body: ListView(
         children: [
           TodoCard(
