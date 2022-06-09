@@ -14,4 +14,22 @@ class TodoModel {
     required this.isDone,
     required this.priority,
   });
+
+  TodoModel.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int,
+        priority = json['priority'] as int,
+        createdAt = DateTime.parse(json['created_at']),
+        isDone = json['is_done'] as bool,
+        userId = json['user'] as String,
+        todo = json['todo'] as String;
+
+  static List<TodoModel> getTodoListFromJson(Map<String, dynamic> json) {
+    List<TodoModel> list = [];
+
+    for (var element in json['todos']) {
+      list.add(TodoModel.fromJson(element));
+    }
+
+    return list;
+  }
 }
