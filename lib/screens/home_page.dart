@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
               itemCount: context.watch<MainProvider>().mainTodos?.length,
               itemBuilder: (context, index) => TodoCard(
                 todoModel: context.watch<MainProvider>().mainTodos![index],
-                onCheckedCallback: () {
+                onCheckedCallback: (bool val) {
                   // TODO : ADD ON CHECKED CALLBACK
                 },
               ),
