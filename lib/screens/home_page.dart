@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_todo_app/project_utils.dart';
 import 'package:simple_todo_app/providers/main_provider.dart';
+import 'package:simple_todo_app/widgets/add_todo_sheet.dart';
 import 'package:simple_todo_app/widgets/todo_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,7 +41,21 @@ class _HomePageState extends State<HomePage> {
           Icons.add,
         ),
         onPressed: () async {
-          // TODO : ADD NEW TODO
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => AddTodoSheet(
+              addTodoCallback: ((todoModel) async {
+                String response = await context.read<MainProvider>().addTodo(todoModel);
+                if (response == 'Success' && mounted) {
+                  Navigator.pop(context);
+                  return true;
+                } else {
+                  showSnackBarMessage('Failed to add todo');
+                  return false;
+                }
+              }),
+            ),
+          );
         },
       ),
       body: context.watch<MainProvider>().mainTodos == null
