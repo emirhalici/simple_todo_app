@@ -36,4 +36,23 @@ class MainProvider with ChangeNotifier {
     notifyListeners();
     return 'Success';
   }
+
+  Future<String> addTodo(TodoModel todoModel) async {
+    client ??= helper.getClient();
+    Map<String, dynamic>? response;
+    try {
+      response = await helper.runCreateMutation(client!, todoModel);
+    } catch (e) {
+      return e.toString();
+    }
+
+    if (response == null) {
+      return 'Mutation returned null';
+    }
+    TodoModel newModel = TodoModel.fromJson(response['insert_todos_one']);
+    mainTodos ??= [];
+    mainTodos!.add(newModel);
+    notifyListeners();
+    return 'Success';
+  }
 }
