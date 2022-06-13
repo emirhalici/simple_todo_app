@@ -7,7 +7,8 @@ import 'package:simple_todo_app/project_constants.dart';
 class TodoCard extends StatefulWidget {
   final TodoModel todoModel;
   final Function onCheckedCallback;
-  const TodoCard({super.key, required this.todoModel, required this.onCheckedCallback});
+  final Function(TodoModel todoModel) onTappedCallback;
+  const TodoCard({super.key, required this.todoModel, required this.onCheckedCallback, required this.onTappedCallback});
 
   @override
   State<TodoCard> createState() => _TodoCardState();
@@ -36,67 +37,70 @@ class _TodoCardState extends State<TodoCard> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           elevation: 0,
           color: cardBackgroundColor,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(
-                          checkColor: Colors.white,
-                          fillColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0),
+          child: InkWell(
+            onTap: () => widget.onTappedCallback(widget.todoModel),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            fillColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            value: isChecked,
+                            onChanged: (val) {
+                              setState(() {
+                                isChecked = val ?? false;
+                                widget.onCheckedCallback(val);
+                              });
+                            },
                           ),
-                          value: isChecked,
-                          onChanged: (val) {
-                            setState(() {
-                              isChecked = val ?? false;
-                              widget.onCheckedCallback(val);
-                            });
-                          },
-                        ),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              widget.todoModel.todo,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 22.sp,
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                widget.todoModel.todo,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6),
-                          child: Text(
-                            DateFormat('dd MMM yyyy').format(widget.todoModel.createdAt),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: Text(
+                              DateFormat('dd MMM yyyy').format(widget.todoModel.createdAt),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                color: stripColor,
-                width: 10,
-              ),
-            ],
+                Container(
+                  color: stripColor,
+                  width: 10,
+                ),
+              ],
+            ),
           ),
         ),
       ),

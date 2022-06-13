@@ -4,6 +4,7 @@ import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_utils.dart';
 import 'package:simple_todo_app/providers/main_provider.dart';
 import 'package:simple_todo_app/widgets/add_todo_sheet.dart';
+import 'package:simple_todo_app/widgets/edit_todo_sheet.dart';
 import 'package:simple_todo_app/widgets/todo_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -65,6 +66,12 @@ class _HomePageState extends State<HomePage> {
               itemCount: context.watch<MainProvider>().mainTodos?.length,
               itemBuilder: (context, index) => TodoCard(
                 todoModel: context.watch<MainProvider>().mainTodos![index],
+                onTappedCallback: (TodoModel todoModel) => showModalBottomSheet(
+                  context: context,
+                  builder: (context) => EditTodoSheet(
+                    todoModel: TodoModel.copyFrom(context.read<MainProvider>().mainTodos![index]),
+                  ),
+                ),
                 onCheckedCallback: (bool val) async {
                   TodoModel originalModel = context.read<MainProvider>().mainTodos![index];
                   TodoModel copy = TodoModel.copyFrom(originalModel);

@@ -40,6 +40,7 @@ class _AddTodoSheetState extends State<AddTodoSheet> {
             TextFormField(
               controller: todoController,
               decoration: const InputDecoration(
+                isDense: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(16)),
                 ),
