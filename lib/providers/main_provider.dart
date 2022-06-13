@@ -55,4 +55,53 @@ class MainProvider with ChangeNotifier {
     notifyListeners();
     return 'Success';
   }
+
+  Future<String> editTodo(TodoModel todoModel) async {
+    client ??= helper.getClient();
+    Map<String, dynamic>? response;
+    try {
+      response = await helper.runEditMutation(client!, todoModel);
+    } catch (e) {
+      return e.toString();
+    }
+
+    if (response == null) {
+      return 'Mutation returned null';
+    }
+
+    try {
+      Map<String, dynamic> json = response['update_todos']['returning'][0];
+      TodoModel newModel = TodoModel.fromJson(json);
+      mainTodos ??= [];
+      mainTodos![mainTodos!.indexWhere((element) => todoModel.id == element.id)] = newModel;
+      notifyListeners();
+      return 'Success';
+    } catch (e) {
+      return 'Mutation returned null, condition may be wrong.';
+    }
+  }
+
+  Future<String> deleteTodo(TodoModel todoModel) async {
+    client ??= helper.getClient();
+    Map<String, dynamic>? response;
+    try {
+      response = await helper.runDeleteMutation(client!, todoModel);
+    } catch (e) {
+      return e.toString();
+    }
+
+    if (response == null) {
+      return 'Mutation returned null';
+    }
+
+    try {
+      Map<String, dynamic> json = response['delete_todos']['returning'][0];
+      mainTodos ??= [];
+      mainTodos!.removeWhere((element) => json['id'] as int == element.id);
+      notifyListeners();
+      return 'Success';
+    } catch (e) {
+      return 'Mutation returned null, condition may be wrong.';
+    }
+  }
 }

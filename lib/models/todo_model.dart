@@ -23,6 +23,14 @@ class TodoModel {
         userId = json['user'] as String,
         todo = json['todo'] as String;
 
+  TodoModel.copyFrom(TodoModel todoModel)
+      : id = todoModel.id,
+        priority = todoModel.priority,
+        createdAt = todoModel.createdAt,
+        isDone = todoModel.isDone,
+        userId = todoModel.userId,
+        todo = todoModel.todo;
+
   static List<TodoModel> getTodoListFromJson(Map<String, dynamic> json) {
     List<TodoModel> list = [];
 

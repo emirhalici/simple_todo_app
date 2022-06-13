@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_utils.dart';
 import 'package:simple_todo_app/providers/main_provider.dart';
 import 'package:simple_todo_app/widgets/add_todo_sheet.dart';
@@ -64,8 +65,21 @@ class _HomePageState extends State<HomePage> {
               itemCount: context.watch<MainProvider>().mainTodos?.length,
               itemBuilder: (context, index) => TodoCard(
                 todoModel: context.watch<MainProvider>().mainTodos![index],
-                onCheckedCallback: (bool val) {
-                  // TODO : ADD ON CHECKED CALLBACK
+                onCheckedCallback: (bool val) async {
+                  TodoModel originalModel = context.read<MainProvider>().mainTodos![index];
+                  TodoModel copy = TodoModel.copyFrom(originalModel);
+                  copy.isDone = val;
+                  context.read<MainProvider>().mainTodos![index] = copy;
+                  try {
+                    String response = await context.read<MainProvider>().editTodo(copy);
+                    if (response != 'Success' && mounted) {
+                      context.read<MainProvider>().mainTodos![index] = originalModel;
+                      showSnackBarMessage('Error editing todo');
+                    }
+                  } catch (e) {
+                    context.read<MainProvider>().mainTodos![index] = originalModel;
+                    showSnackBarMessage('Error editing todo');
+                  }
                 },
               ),
             ),
