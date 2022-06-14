@@ -31,6 +31,7 @@ dependencies:
   provider: ^6.0.2
   graphql: ^5.1.1
   numberpicker: ^2.1.1
+  flutter_svg: ^1.1.0
 
 
 dev_dependencies:
