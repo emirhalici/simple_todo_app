@@ -11,21 +11,9 @@ class MainProvider with ChangeNotifier {
 
   Future<String> getTodos() async {
     client ??= helper.getClient();
-    String query = r'''
-    query {
-      todos(order_by: {created_at: asc}) {
-        id
-        priority
-        todo
-        created_at
-        is_done
-        user
-        }
-    }
-    ''';
     Map<String, dynamic>? response;
     try {
-      response = await helper.runQuery(client!, query);
+      response = await helper.runQuery(client!, Queries.getAllTodosAscQuery);
     } catch (e) {
       return e.toString();
     }

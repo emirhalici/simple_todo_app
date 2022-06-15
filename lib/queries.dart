@@ -36,4 +36,17 @@ class Queries {
       }
     }
   ''';
+
+  static const String getAllTodosAscQuery = r'''
+    query {
+      todos(order_by: {created_at: asc}) {
+        id
+        priority
+        todo
+        created_at
+        is_done
+        user
+        }
+    }
+  ''';
 }
