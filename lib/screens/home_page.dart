@@ -17,7 +17,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void showSnackBarMessage(String message) => ProjectUtils.showSnackBarMessage(context, message);
+  void showSnackBarMessage(String message) {
+    if (mounted) ProjectUtils.showSnackBarMessage(context, message);
+  }
 
   void getTodos() async {
     String responseMessage = await context.read<MainProvider>().getTodos();

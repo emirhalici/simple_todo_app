@@ -13,7 +13,9 @@ class AddTodoSheet extends StatefulWidget {
 }
 
 class _AddTodoSheetState extends State<AddTodoSheet> {
-  void showSnackBarMessage(String message) => ProjectUtils.showSnackBarMessage(context, message);
+  void showSnackBarMessage(String message) {
+    if (mounted) ProjectUtils.showSnackBarMessage(context, message);
+  }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController todoController = TextEditingController();
