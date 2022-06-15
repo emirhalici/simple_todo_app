@@ -48,4 +48,6 @@ class ProjectConstants {
       brightness: Brightness.dark,
     ),
   );
+
+  static const String dbHttpLink = 'https://my-todo-app-hasura.herokuapp.com/v1/graphql';
 }

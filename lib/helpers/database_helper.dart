@@ -1,8 +1,9 @@
 import 'package:graphql/client.dart';
+import 'package:simple_todo_app/project_constants.dart';
 
 class DatabaseHelper {
   GraphQLClient getClient() {
-    final httpLink = HttpLink('https://my-todo-app-hasura.herokuapp.com/v1/graphql');
+    final httpLink = HttpLink(ProjectConstants.dbHttpLink);
     return GraphQLClient(
       link: httpLink,
       cache: GraphQLCache(),
