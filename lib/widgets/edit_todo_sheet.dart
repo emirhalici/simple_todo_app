@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
@@ -15,9 +16,9 @@ class EditTodoSheet extends StatefulWidget {
 }
 
 class _EditTodoSheetState extends State<EditTodoSheet> {
-  void showSnackBarMessage(String message) {
-    if (mounted) ProjectUtils.showSnackBarMessage(context, message);
-  }
+  void _showToast(BuildContext context, String message) => fToast.showToast(child: ProjectUtils.toastWidget(context, message));
+
+  late FToast fToast;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController todoController = TextEditingController();
@@ -28,6 +29,8 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
   void initState() {
     todoController.text = widget.todoModel.todo;
     _priorityValue = widget.todoModel.priority;
+    fToast = FToast();
+    fToast.init(context);
     super.initState();
   }
 
@@ -37,8 +40,9 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
       child: Form(
         key: _formKey,
-        child: ListView(
-          shrinkWrap: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Edit Todo',
@@ -116,7 +120,7 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
                       if (response == 'Success' && mounted) {
                         Navigator.pop(context);
                       } else {
-                        showSnackBarMessage('Error while saving the edited todo');
+                        _showToast(context, 'Error while saving the edited todo.');
                         setState(() {
                           _isLoading = false;
                         });
@@ -142,7 +146,7 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
                       if (response == 'Success' && mounted) {
                         Navigator.pop(context);
                       } else {
-                        showSnackBarMessage('Error while saving the edited todo');
+                        _showToast(context, 'Error while saving the edited todo.');
                         setState(() {
                           _isLoading = false;
                         });

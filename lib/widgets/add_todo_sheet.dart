@@ -28,8 +28,9 @@ class _AddTodoSheetState extends State<AddTodoSheet> {
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
       child: Form(
         key: _formKey,
-        child: ListView(
-          shrinkWrap: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Add Todo',

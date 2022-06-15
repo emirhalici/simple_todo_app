@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_utils.dart';
@@ -17,14 +18,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void showSnackBarMessage(String message) {
-    if (mounted) ProjectUtils.showSnackBarMessage(context, message);
-  }
+  void _showToast(BuildContext context, String message) => fToast.showToast(child: ProjectUtils.toastWidget(context, message));
+  late FToast fToast;
 
   void getTodos() async {
     String responseMessage = await context.read<MainProvider>().getTodos();
     if (responseMessage != 'Success') {
-      showSnackBarMessage('Error while getting todos from server.');
+      if (mounted) _showToast(context, 'Error while getting todos from server.');
     }
   }
 
@@ -33,6 +33,8 @@ class _HomePageState extends State<HomePage> {
     if (context.read<MainProvider>().mainTodos == null) {
       getTodos();
     }
+    fToast = FToast();
+    fToast.init(context);
     super.initState();
   }
 
@@ -56,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                   return true;
                 } else {
-                  showSnackBarMessage('Failed to add todo');
+                  _showToast(context, 'Failed to add todo.');
                   return false;
                 }
               }),
@@ -87,11 +89,11 @@ class _HomePageState extends State<HomePage> {
                         String response = await context.read<MainProvider>().editTodo(copy);
                         if (response != 'Success' && mounted) {
                           context.read<MainProvider>().mainTodos![index] = originalModel;
-                          showSnackBarMessage('Error editing todo');
+                          _showToast(context, 'Error editing todo.');
                         }
                       } catch (e) {
                         context.read<MainProvider>().mainTodos![index] = originalModel;
-                        showSnackBarMessage('Error editing todo');
+                        _showToast(context, 'Error editing todo.');
                       }
                     },
                   ),
