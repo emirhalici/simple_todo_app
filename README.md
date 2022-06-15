@@ -1,16 +1,26 @@
 # simple_todo_app
 
-A new Flutter project.
+A simple Todo app designed to simply use GraphQL as backend and provide an easy to use UI/UX.
 
-## Getting Started
+> A breakdown of the project and explanation to GraphQL will be published on Medium as a blog post shortly.
 
-This project is a starting point for a Flutter application.
+## Run Locally
+Clone the project
 
-A few resources to get you started if this is your first Flutter project:
+    git clone https://github.com/emirhalici/simple_todo_app
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Go to the project directory
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    cd simple_todo_app
+
+Install dependencies
+
+    flutter pub get
+
+Run App
+
+    flutter run
+
+## Photos/Screenshots
+
+![Simple Todo App Screenshots](https://user-images.githubusercontent.com/81600010/173668968-1f178dc6-22d9-4207-801b-a86c87d53c9f.png)

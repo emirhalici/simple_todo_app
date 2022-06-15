@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:simple_todo_app/helpers/database_helper.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
+import 'package:simple_todo_app/queries.dart';
 
 class MainProvider with ChangeNotifier {
   GraphQLClient? client;
@@ -10,21 +11,9 @@ class MainProvider with ChangeNotifier {
 
   Future<String> getTodos() async {
     client ??= helper.getClient();
-    String query = r'''
-    query {
-      todos(order_by: {created_at: asc}) {
-        id
-        priority
-        todo
-        created_at
-        is_done
-        user
-        }
-    }
-    ''';
     Map<String, dynamic>? response;
     try {
-      response = await helper.runQuery(client!, query);
+      response = await helper.runQuery(client!, Queries.getAllTodosAscQuery);
     } catch (e) {
       return e.toString();
     }
@@ -39,9 +28,16 @@ class MainProvider with ChangeNotifier {
 
   Future<String> addTodo(TodoModel todoModel) async {
     client ??= helper.getClient();
+    Map<String, dynamic> variables = {
+      'is_done': todoModel.isDone,
+      'todo': todoModel.todo,
+      'priority': todoModel.priority,
+      'user': '07c42a78-d85f-46e8-a98b-2c3d45c3b52b',
+    };
+
     Map<String, dynamic>? response;
     try {
-      response = await helper.runCreateMutation(client!, todoModel);
+      response = await helper.runMutation(client!, Queries.addQuery, variables);
     } catch (e) {
       return e.toString();
     }
@@ -58,9 +54,16 @@ class MainProvider with ChangeNotifier {
 
   Future<String> editTodo(TodoModel todoModel) async {
     client ??= helper.getClient();
+    Map<String, dynamic> variables = {
+      '_eq': todoModel.id,
+      'is_done': todoModel.isDone,
+      'priority': todoModel.priority,
+      'todo': todoModel.todo,
+    };
+
     Map<String, dynamic>? response;
     try {
-      response = await helper.runEditMutation(client!, todoModel);
+      response = await helper.runMutation(client!, Queries.editQuery, variables);
     } catch (e) {
       return e.toString();
     }
@@ -83,9 +86,13 @@ class MainProvider with ChangeNotifier {
 
   Future<String> deleteTodo(TodoModel todoModel) async {
     client ??= helper.getClient();
+    Map<String, dynamic> variables = {
+      '_eq': todoModel.id,
+    };
+
     Map<String, dynamic>? response;
     try {
-      response = await helper.runDeleteMutation(client!, todoModel);
+      response = await helper.runMutation(client!, Queries.deleteQuery, variables);
     } catch (e) {
       return e.toString();
     }
