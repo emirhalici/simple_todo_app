@@ -50,6 +50,12 @@ class _HomePageState extends State<HomePage> {
         onPressed: () async {
           showModalBottomSheet(
             context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.0),
+                topRight: Radius.circular(16.0),
+              ),
+            ),
             builder: (context) => AddTodoSheet(
               addTodoCallback: ((todoModel) async {
                 String response = await context.read<MainProvider>().addTodo(todoModel);
@@ -75,6 +81,12 @@ class _HomePageState extends State<HomePage> {
                     todoModel: context.watch<MainProvider>().mainTodos![index],
                     onTappedCallback: (TodoModel todoModel) => showModalBottomSheet(
                       context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0),
+                        ),
+                      ),
                       builder: (context) => EditTodoSheet(
                         todoModel: TodoModel.copyFrom(context.read<MainProvider>().mainTodos![index]),
                       ),
