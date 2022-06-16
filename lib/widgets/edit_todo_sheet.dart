@@ -124,7 +124,6 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
                         setState(() {
                           _isLoading = false;
                         });
-                        print(response);
                       }
                     },
                     label: const Text('Save'),
@@ -150,7 +149,6 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
                         setState(() {
                           _isLoading = false;
                         });
-                        print(response);
                       }
                     },
                     label: const Text('Delete'),

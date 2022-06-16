@@ -76,8 +76,6 @@ class _AddTodoSheetState extends State<AddTodoSheet> {
                   maxValue: 3,
                   axis: Axis.horizontal,
                   haptics: true,
-                  //itemHeight: 50,
-                  //itemWidth: 100,
                   value: _priorityValue,
                   selectedTextStyle: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
