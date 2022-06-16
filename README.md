@@ -23,4 +23,4 @@ Run App
 
 ## Photos/Screenshots
 
-![Simple Todo App Screenshots](https://user-images.githubusercontent.com/81600010/173668968-1f178dc6-22d9-4207-801b-a86c87d53c9f.png)
+![simple_todo_app Screenshots](https://user-images.githubusercontent.com/81600010/174065006-0efff4ee-2eaa-4a8a-b770-0e585768f8af.png)
