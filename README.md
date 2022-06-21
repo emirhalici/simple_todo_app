@@ -2,7 +2,9 @@
 
 A simple Todo app designed to simply use GraphQL as backend and provide an easy to use UI/UX.
 
-> A breakdown of the project and explanation to GraphQL will be published on Medium as a blog post shortly.
+> A breakdown of the project and explanation to GraphQL is published at [this medium post][1]
+
+[1]: <https://medium.com/coreborn/using-hasura-graphql-as-a-backend-for-flutter-projects-fa6179ede153> "Medium article"
 
 ## Run Locally
 Clone the project
