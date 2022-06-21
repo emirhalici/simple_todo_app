@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_utils.dart';
-import 'package:simple_todo_app/providers/main_provider.dart';
+import 'package:simple_todo_app/view_models/home_view_model.dart';
 import 'package:simple_todo_app/widgets/add_todo_sheet.dart';
 import 'package:simple_todo_app/widgets/edit_todo_sheet.dart';
 import 'package:simple_todo_app/widgets/empty_state_widget.dart';
@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildLoadingState() => ProjectUtils.circularProgressBar(context);
 
   Widget buildEmptyState() => const EmptyStateWidget();
-  
+
   Widget buildListView() => ListView.builder(
         itemCount: context.watch<HomeViewModel>().mainTodos?.length,
         itemBuilder: (context, index) => TodoCard(
@@ -100,20 +100,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           onCheckedCallback: (bool val) async {
-            TodoModel originalModel = context.read<HomeViewModel>().mainTodos![index];
-            TodoModel copy = TodoModel.copyFrom(originalModel);
-            copy.isDone = val;
-            context.read<HomeViewModel>().mainTodos![index] = copy;
-            try {
-              String response = await context.read<HomeViewModel>().editTodo(copy);
-              if (response != 'Success' && mounted) {
-                context.read<HomeViewModel>().mainTodos![index] = originalModel;
+            await context.read<HomeViewModel>().todoCardOnCheckedCallback(val, index).then((response) {
+              if (!response && mounted) {
                 _showToast(context, 'Error editing todo.');
+                return false;
               }
-            } catch (e) {
-              context.read<HomeViewModel>().mainTodos![index] = originalModel;
-              _showToast(context, 'Error editing todo.');
-            }
+            });
+            return true;
           },
         ),
       );

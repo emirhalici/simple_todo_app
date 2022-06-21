@@ -6,7 +6,7 @@ import 'package:simple_todo_app/project_constants.dart';
 
 class TodoCard extends StatefulWidget {
   final TodoModel todoModel;
-  final Function onCheckedCallback;
+  final Future<bool> Function(bool val) onCheckedCallback;
   final Function(TodoModel todoModel) onTappedCallback;
   const TodoCard({super.key, required this.todoModel, required this.onCheckedCallback, required this.onTappedCallback});
 
@@ -56,10 +56,17 @@ class _TodoCardState extends State<TodoCard> {
                               borderRadius: BorderRadius.circular(4.0),
                             ),
                             value: isChecked,
-                            onChanged: (val) {
+                            onChanged: (val) async {
+                              bool originalState = isChecked;
                               setState(() {
-                                isChecked = val ?? false;
-                                widget.onCheckedCallback(val);
+                                isChecked = val!;
+                              });
+                              await widget.onCheckedCallback(val!).then((response) {
+                                if (!response) {
+                                  setState(() {
+                                    isChecked = originalState;
+                                  });
+                                }
                               });
                             },
                           ),

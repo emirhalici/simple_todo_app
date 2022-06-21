@@ -5,7 +5,8 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_utils.dart';
-import 'package:simple_todo_app/providers/main_provider.dart';
+import 'package:simple_todo_app/view_models/home_view_model.dart';
+
 
 class EditTodoSheet extends StatefulWidget {
   final TodoModel todoModel;
