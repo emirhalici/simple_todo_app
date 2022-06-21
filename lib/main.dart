@@ -9,7 +9,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => MainProvider()),
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         darkTheme: ProjectConstants.darkTheme,
         themeMode: ThemeMode.system,
         home: const HomePage(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

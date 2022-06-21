@@ -116,7 +116,7 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
                       widget.todoModel.priority = _priorityValue;
                       widget.todoModel.todo = todoController.text;
 
-                      String response = await context.read<MainProvider>().editTodo(widget.todoModel);
+                      String response = await context.read<HomeViewModel>().editTodo(widget.todoModel);
                       if (response == 'Success' && mounted) {
                         Navigator.pop(context);
                       } else {
@@ -141,7 +141,7 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
                         _isLoading = true;
                       });
 
-                      String response = await context.read<MainProvider>().deleteTodo(widget.todoModel);
+                      String response = await context.read<HomeViewModel>().deleteTodo(widget.todoModel);
                       if (response == 'Success' && mounted) {
                         Navigator.pop(context);
                       } else {

@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   late FToast fToast;
 
   void getTodos() async {
-    String responseMessage = await context.read<MainProvider>().getTodos();
+    String responseMessage = await context.read<HomeViewModel>().getTodos();
     if (responseMessage != 'Success') {
       if (mounted) _showToast(context, 'Error while getting todos from server.');
     }
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    if (context.read<MainProvider>().mainTodos == null) {
+    if (context.read<HomeViewModel>().mainTodos == null) {
       getTodos();
     }
     fToast = FToast();
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
             ),
             builder: (context) => AddTodoSheet(
               addTodoCallback: ((todoModel) async {
-                String response = await context.read<MainProvider>().addTodo(todoModel);
+                String response = await context.read<HomeViewModel>().addTodo(todoModel);
                 if (response == 'Success' && mounted) {
                   Navigator.pop(context);
                   return true;
@@ -71,44 +71,50 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      body: context.watch<MainProvider>().mainTodos == null
-          ? ProjectUtils.circularProgressBar(context)
-          : context.watch<MainProvider>().mainTodos!.isEmpty
-              ? const EmptyStateWidget()
-              : ListView.builder(
-                  itemCount: context.watch<MainProvider>().mainTodos?.length,
-                  itemBuilder: (context, index) => TodoCard(
-                    todoModel: context.watch<MainProvider>().mainTodos![index],
-                    onTappedCallback: (TodoModel todoModel) => showModalBottomSheet(
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16.0),
-                          topRight: Radius.circular(16.0),
-                        ),
-                      ),
-                      builder: (context) => EditTodoSheet(
-                        todoModel: TodoModel.copyFrom(context.read<MainProvider>().mainTodos![index]),
-                      ),
-                    ),
-                    onCheckedCallback: (bool val) async {
-                      TodoModel originalModel = context.read<MainProvider>().mainTodos![index];
-                      TodoModel copy = TodoModel.copyFrom(originalModel);
-                      copy.isDone = val;
-                      context.read<MainProvider>().mainTodos![index] = copy;
-                      try {
-                        String response = await context.read<MainProvider>().editTodo(copy);
-                        if (response != 'Success' && mounted) {
-                          context.read<MainProvider>().mainTodos![index] = originalModel;
-                          _showToast(context, 'Error editing todo.');
-                        }
-                      } catch (e) {
-                        context.read<MainProvider>().mainTodos![index] = originalModel;
-                        _showToast(context, 'Error editing todo.');
-                      }
-                    },
-                  ),
-                ),
+      body: context.watch<HomeViewModel>().mainTodos == null
+          ? buildLoadingState()
+          : context.watch<HomeViewModel>().mainTodos!.isEmpty
+              ? buildEmptyState()
+              : buildListView(),
     );
   }
+
+  Widget buildLoadingState() => ProjectUtils.circularProgressBar(context);
+
+  Widget buildEmptyState() => const EmptyStateWidget();
+  
+  Widget buildListView() => ListView.builder(
+        itemCount: context.watch<HomeViewModel>().mainTodos?.length,
+        itemBuilder: (context, index) => TodoCard(
+          todoModel: context.watch<HomeViewModel>().mainTodos![index],
+          onTappedCallback: (TodoModel todoModel) => showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.0),
+                topRight: Radius.circular(16.0),
+              ),
+            ),
+            builder: (context) => EditTodoSheet(
+              todoModel: TodoModel.copyFrom(context.read<HomeViewModel>().mainTodos![index]),
+            ),
+          ),
+          onCheckedCallback: (bool val) async {
+            TodoModel originalModel = context.read<HomeViewModel>().mainTodos![index];
+            TodoModel copy = TodoModel.copyFrom(originalModel);
+            copy.isDone = val;
+            context.read<HomeViewModel>().mainTodos![index] = copy;
+            try {
+              String response = await context.read<HomeViewModel>().editTodo(copy);
+              if (response != 'Success' && mounted) {
+                context.read<HomeViewModel>().mainTodos![index] = originalModel;
+                _showToast(context, 'Error editing todo.');
+              }
+            } catch (e) {
+              context.read<HomeViewModel>().mainTodos![index] = originalModel;
+              _showToast(context, 'Error editing todo.');
+            }
+          },
+        ),
+      );
 }

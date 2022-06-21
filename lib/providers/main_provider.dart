@@ -4,7 +4,7 @@ import 'package:simple_todo_app/helpers/database_helper.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/queries.dart';
 
-class MainProvider with ChangeNotifier {
+class HomeViewModel with ChangeNotifier {
   GraphQLClient? client;
   DatabaseHelper helper = DatabaseHelper();
   List<TodoModel>? mainTodos;
