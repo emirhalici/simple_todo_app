@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:simple_todo_app/helpers/database_helper.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/queries.dart';
 
-class MainProvider with ChangeNotifier {
+class HomeViewModel with ChangeNotifier {
   GraphQLClient? client;
   DatabaseHelper helper = DatabaseHelper();
   List<TodoModel>? mainTodos;
@@ -110,5 +112,22 @@ class MainProvider with ChangeNotifier {
     } catch (e) {
       return 'Mutation returned null, condition may be wrong.';
     }
+  }
+
+  Future<bool> todoCardOnCheckedCallback(bool val, int todoIndex) async {
+    TodoModel originalModel = mainTodos![todoIndex];
+    TodoModel copy = TodoModel.copyFrom(originalModel);
+    copy.isDone = val;
+    try {
+      String response = await editTodo(copy);
+      if (response != 'Success') {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    mainTodos![todoIndex] = copy;
+    notifyListeners();
+    return true;
   }
 }
