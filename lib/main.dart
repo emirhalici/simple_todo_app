@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_todo_app/project_constants.dart';
 import 'package:simple_todo_app/screens/home_page.dart';
+import 'package:simple_todo_app/uses_cases/network_change/no_network_widget.dart';
 import 'package:simple_todo_app/view_models/home_view_model.dart';
 
 void main() {
@@ -28,6 +29,14 @@ class MyApp extends StatelessWidget {
         theme: ProjectConstants.lightTheme,
         darkTheme: ProjectConstants.darkTheme,
         themeMode: ThemeMode.system,
+        builder: (context, child) {
+          return Column(
+            children: [
+              Expanded(child: child ?? const SizedBox()),
+              const NoNetworkWidget(),
+            ],
+          );
+        },
         home: const HomePage(),
         debugShowCheckedModeBanner: false,
       ),
