@@ -47,29 +47,7 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(
           Icons.add,
         ),
-        onPressed: () async {
-          showModalBottomSheet(
-            context: context,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.0),
-                topRight: Radius.circular(16.0),
-              ),
-            ),
-            builder: (context) => AddTodoSheet(
-              addTodoCallback: ((todoModel) async {
-                String response = await context.read<HomeViewModel>().addTodo(todoModel);
-                if (response == 'Success' && mounted) {
-                  Navigator.pop(context);
-                  return true;
-                } else {
-                  _showToast(context, 'Failed to add todo.');
-                  return false;
-                }
-              }),
-            ),
-          );
-        },
+        onPressed: () async => showAddTodoModalBottomSheet(context),
       ),
       body: context.watch<HomeViewModel>().mainTodos == null
           ? buildLoadingState()
@@ -78,6 +56,28 @@ class _HomePageState extends State<HomePage> {
               : buildListView(),
     );
   }
+
+  showAddTodoModalBottomSheet(BuildContext context) async => showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.0),
+            topRight: Radius.circular(16.0),
+          ),
+        ),
+        builder: (context) => AddTodoSheet(
+          addTodoCallback: ((todoModel) async {
+            String response = await context.read<HomeViewModel>().addTodo(todoModel);
+            if (response == 'Success' && mounted) {
+              Navigator.pop(context);
+              return true;
+            } else {
+              _showToast(context, 'Failed to add todo.');
+              return false;
+            }
+          }),
+        ),
+      );
 
   Widget buildLoadingState() => ProjectUtils.circularProgressBar(context);
 
