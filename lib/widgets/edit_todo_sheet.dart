@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:provider/provider.dart';
 import 'package:simple_todo_app/models/todo_model.dart';
 import 'package:simple_todo_app/project_utils.dart';
-import 'package:simple_todo_app/view_models/home_view_model.dart';
-
 
 class EditTodoSheet extends StatefulWidget {
   final TodoModel todoModel;
-  const EditTodoSheet({super.key, required this.todoModel});
+  final Future<bool> Function(TodoModel todoModel) editTodoCallback;
+  final Future<bool> Function(TodoModel todoModel) deleteTodoCallback;
+  const EditTodoSheet({
+    super.key,
+    required this.todoModel,
+    required this.editTodoCallback,
+    required this.deleteTodoCallback,
+  });
 
   @override
   State<EditTodoSheet> createState() => _EditTodoSheetState();
@@ -108,24 +112,7 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      if (!_formKey.currentState!.validate()) {
-                        return;
-                      }
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      widget.todoModel.priority = _priorityValue;
-                      widget.todoModel.todo = todoController.text;
-
-                      String response = await context.read<HomeViewModel>().editTodo(widget.todoModel);
-                      if (response == 'Success' && mounted) {
-                        Navigator.pop(context);
-                      } else {
-                        _showToast(context, 'Error while saving the edited todo.');
-                        setState(() {
-                          _isLoading = false;
-                        });
-                      }
+                      await _editTodoOnPressed(context);
                     },
                     label: const Text('Save'),
                     icon: const Icon(Icons.edit),
@@ -138,19 +125,7 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
                       backgroundColor: MaterialStateProperty.all(Colors.red),
                     ),
                     onPressed: () async {
-                      setState(() {
-                        _isLoading = true;
-                      });
-
-                      String response = await context.read<HomeViewModel>().deleteTodo(widget.todoModel);
-                      if (response == 'Success' && mounted) {
-                        Navigator.pop(context);
-                      } else {
-                        _showToast(context, 'Error while saving the edited todo.');
-                        setState(() {
-                          _isLoading = false;
-                        });
-                      }
+                      await _deleteTodoOnPressed(context);
                     },
                     label: const Text('Delete'),
                     icon: const Icon(Icons.delete),
@@ -162,5 +137,41 @@ class _EditTodoSheetState extends State<EditTodoSheet> {
         ),
       ),
     );
+  }
+
+  Future<void> _editTodoOnPressed(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+    widget.todoModel.priority = _priorityValue;
+    widget.todoModel.todo = todoController.text;
+
+    bool response = await widget.editTodoCallback(widget.todoModel);
+    if (response && mounted) {
+      Navigator.pop(context);
+    } else {
+      _showToast(context, 'Error while saving the edited todo.');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _deleteTodoOnPressed(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+    bool response = await widget.deleteTodoCallback(widget.todoModel);
+    if (response && mounted) {
+      Navigator.pop(context);
+    } else {
+      _showToast(context, 'Error while deleting todo.');
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

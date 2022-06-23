@@ -97,6 +97,18 @@ class _HomePageState extends State<HomePage> {
             ),
             builder: (context) => EditTodoSheet(
               todoModel: TodoModel.copyFrom(context.read<HomeViewModel>().mainTodos![index]),
+              editTodoCallback: (TodoModel model) async {
+                await context.read<HomeViewModel>().editTodo(model).then((response) async {
+                  if (response == 'Success') return true;
+                });
+                return false;
+              },
+              deleteTodoCallback: (TodoModel model) async {
+                await context.read<HomeViewModel>().deleteTodo(model).then((response) async {
+                  if (response == 'Success') return true;
+                });
+                return false;
+              },
             ),
           ),
           onCheckedCallback: (bool val) async {
